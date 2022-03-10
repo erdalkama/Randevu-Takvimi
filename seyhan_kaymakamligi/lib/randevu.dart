@@ -50,6 +50,7 @@ Bekleyenler({Key? key}) : super(key: key);
                         itemBuilder: (context, index) {
                           return Card(
                             child: ListTile(
+                              
                               title: Text(
                                   '${listOfDocumentSnap[index]['adsoyad']}',
                                   style: TextStyle(fontSize: 20)),
