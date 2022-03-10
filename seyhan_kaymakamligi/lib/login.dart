@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 48.0),
+              
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 validator: (input) {

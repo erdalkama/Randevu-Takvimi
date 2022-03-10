@@ -39,7 +39,7 @@ Bekleyenler({Key? key}) : super(key: key);
               builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                 if (asyncSnapshot.hasError) {
                   return Center(
-                      child: Text('Bir Hata Oluştu, Tekrar Deneynizi'));
+                      child: Text('Bir Hata Oluştu, Tekrar Deneyiniz'));
                 } else {
                   if (asyncSnapshot.hasData) {
                     List<DocumentSnapshot> listOfDocumentSnap =
@@ -48,27 +48,31 @@ Bekleyenler({Key? key}) : super(key: key);
                       child: ListView.builder(
                         itemCount: listOfDocumentSnap.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              
-                              title: Text(
-                                  '${listOfDocumentSnap[index]['adsoyad']}',
-                                  style: TextStyle(fontSize: 20)),
-                              subtitle: Text(
-                                  '${listOfDocumentSnap[index]['konu']}',
-                                  style: TextStyle(fontSize: 16)),
-                              leading: Text(
-                                '${listOfDocumentSnap[index]['telefon']}',
-                                style: TextStyle(fontSize: 16)), 
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () async {
-                                  await listOfDocumentSnap[index]
-                                      .reference
-                                      .delete();
-                                },
+                          return Row(
+                            children: 
+                              [
+                                Expanded(
+                                child:ListTile(
+                                title: Text(
+                                    '${listOfDocumentSnap[index]['adsoyad']}',
+                                    style: TextStyle(fontSize: 20)),
+                                subtitle: Text(
+                                    '${listOfDocumentSnap[index]['konu']}',
+                                    style: TextStyle(fontSize: 16)),
+                                leading: Text(
+                                  '${listOfDocumentSnap[index]['telefon']}',
+                                  style: TextStyle(fontSize: 16)), 
+                                trailing: IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () async {
+                                    await listOfDocumentSnap[index]
+                                        .reference
+                                        .delete();
+                                  },
+                                ),
                               ),
-                            ),
+                                ),
+                            ],
                           );
                         },
                       ),
@@ -83,22 +87,34 @@ Bekleyenler({Key? key}) : super(key: key);
             ),
             Padding(
               padding:
-                  const EdgeInsets.fromLTRB(5.0, 20.0, 60.0, 20.0),
+                  const EdgeInsets.fromLTRB(5.0, 20.0, 75.0, 20.0),
               child: Form(
                 child: Column(
                   children: [
                     TextFormField(
                       controller: adsoyadController,
                       decoration:
-                          InputDecoration(hintText: 'Ad Soyad Ünvan Giriniz'),
+                          InputDecoration(hintText: 
+                          'Ad Soyad Ünvan Giriniz',
+                          border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                          ),
                     ),
                     TextFormField(
                       controller: konuController,
-                      decoration: InputDecoration(hintText: 'Randevu Konusu Giriniz'),
+                      decoration: InputDecoration(hintText: 
+                          'Randevu Konusu Giriniz',
+                          border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                      ),
                     ),
                     TextFormField(
                       controller: telefonController,
-                      decoration: InputDecoration(hintText: 'Telefon Numarası Giriniz'),
+                      decoration: InputDecoration(hintText: 
+                          'Telefon Numarası Giriniz',
+                          border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                      ),
                       ),
                   ],
                 ),
