@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "789432070164",
+    "project_id": "seyhan-kaymakamligi-62f0b",
+    "storage_bucket": "seyhan-kaymakamligi-62f0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789432070164:android:a283ad4e9266426f873701",
+        "android_client_info": {
+          "package_name": "com.example.seyhan_kaymakamligi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789432070164-t7nclshiif23l5sls7blmbgnipg9o729.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLG7DDGt-JmHZycywEXrIDnGSlax6a4Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789432070164-t7nclshiif23l5sls7blmbgnipg9o729.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "789432070164-3dv8gtc10djk6vq7qokb1bvvlg7kp4gh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "n"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
