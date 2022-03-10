@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:seyhan_kaymakamligi/randevu.dart';
 import 'package:seyhan_kaymakamligi/splash.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -24,7 +25,7 @@ class AnaGiris extends StatelessWidget {
         primaryColor: Color.fromARGB(255, 255, 255, 255), 
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
       ),
-      home: AnimatedSplashScreen(),
+      home: Bekleyenler(),
       debugShowCheckedModeBanner: false,
     );
   }

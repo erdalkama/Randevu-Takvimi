@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 0, 0, 0),
           title: Text(
-            'SEYHAN KAYMAKAMLIĞI',
+            'STAJ PROJESİ',
             style: TextStyle(
               fontWeight: FontWeight.w700,
             ),
@@ -37,6 +37,14 @@ class _HomePageState extends State<HomePage> {
   ),
       )
   ]
+          ),
+          body: Container(
+               decoration: BoxDecoration(
+                image: DecorationImage(
+                 image: AssetImage("assets/seyhan_logo_3.png"),
+                 fit: BoxFit.scaleDown,
+               ),
+            ),
           ),
     );
   }

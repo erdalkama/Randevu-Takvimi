@@ -1,14 +1,18 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Bekleyenler extends StatelessWidget {
-const Bekleyenler({Key? key}) : super(key: key);
-
+Bekleyenler({Key? key}) : super(key: key);
+  final _firestore = FirebaseFirestore.instance;
+  TextEditingController adsoyadController = TextEditingController();
+  TextEditingController konuController = TextEditingController();
+  TextEditingController telefonController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference bekleyenlerRef = _firestore.collection('data1');
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -21,24 +25,98 @@ const Bekleyenler({Key? key}) : super(key: key);
           ),
           centerTitle: true,
           ),
-          body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('data1').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-  
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              return Container(
-                child: Center(child: Text(document['text'])),
-              );
-            }).toList(),
-          );
+        body: Container(
+          decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/seyhan_logo_3.png"),
+            fit: BoxFit.scaleDown,
+          ),
+        ),
+        child: Column(
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: bekleyenlerRef.snapshots(),
+              builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                if (asyncSnapshot.hasError) {
+                  return Center(
+                      child: Text('Bir Hata Oluştu, Tekrar Deneynizi'));
+                } else {
+                  if (asyncSnapshot.hasData) {
+                    List<DocumentSnapshot> listOfDocumentSnap =
+                        asyncSnapshot.data.docs;
+                    return Flexible(
+                      child: ListView.builder(
+                        itemCount: listOfDocumentSnap.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              title: Text(
+                                  '${listOfDocumentSnap[index]['adsoyad']}',
+                                  style: TextStyle(fontSize: 20)),
+                              subtitle: Text(
+                                  '${listOfDocumentSnap[index]['konu']}',
+                                  style: TextStyle(fontSize: 16)),
+                              leading: Text(
+                                '${listOfDocumentSnap[index]['telefon']}',
+                                style: TextStyle(fontSize: 16)), 
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  await listOfDocumentSnap[index]
+                                      .reference
+                                      .delete();
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }
+              },
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.fromLTRB(5.0, 20.0, 60.0, 20.0),
+              child: Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: adsoyadController,
+                      decoration:
+                          InputDecoration(hintText: 'Ad Soyad Ünvan Giriniz'),
+                    ),
+                    TextFormField(
+                      controller: konuController,
+                      decoration: InputDecoration(hintText: 'Randevu Konusu Giriniz'),
+                    ),
+                    TextFormField(
+                      controller: telefonController,
+                      decoration: InputDecoration(hintText: 'Telefon Numarası Giriniz'),
+                      ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text('Ekle'),
+        onPressed: () async {
+          Map<String, dynamic> data1Data = {
+            'telefon':telefonController.text,
+            'adsoyad': adsoyadController.text,
+            'konu': konuController.text,
+          };
+          await bekleyenlerRef.doc().set(data1Data);
         },
       ),
-);
+      );
   }
 }
