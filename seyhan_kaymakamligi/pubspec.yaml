@@ -38,6 +38,7 @@ dependencies:
   connectivity_plus: ^2.2.1
   firebase_core: ^1.13.1
   cloud_firestore: ^3.1.10
+  syncfusion_flutter_calendar: ^19.4.55
   
 dev_dependencies:
   flutter_test:

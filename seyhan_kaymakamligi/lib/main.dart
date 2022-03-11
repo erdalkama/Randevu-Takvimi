@@ -25,7 +25,7 @@ class AnaGiris extends StatelessWidget {
         primaryColor: Color.fromARGB(255, 255, 255, 255), 
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
       ),
-      home: AnimatedSplashScreen(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

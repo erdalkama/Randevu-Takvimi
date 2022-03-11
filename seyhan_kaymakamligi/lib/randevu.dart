@@ -29,6 +29,7 @@ Bekleyenler({Key? key}) : super(key: key);
           decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/seyhan_logo_3.png"),
+            colorFilter: const ColorFilter.mode(Color.fromARGB(29, 114, 114, 114), BlendMode.modulate),
             fit: BoxFit.scaleDown,
           ),
         ),
@@ -70,6 +71,14 @@ Bekleyenler({Key? key}) : super(key: key);
                                         .delete();
                                   },
                                 ),
+                               /* onLongPress: () async {
+                                     Map<String, dynamic> data1Data = {
+                                     'telefon':telefonController.text,
+                                     'adsoyad': adsoyadController.text,
+                                     'konu': konuController.text,
+                                    };
+                                  await bekleyenlerRef.doc().update(data1Data);
+                                },*/
                               ),
                                 ),
                             ],
