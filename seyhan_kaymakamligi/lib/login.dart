@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 48.0),
-              
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 validator: (input) {
@@ -104,52 +103,48 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-   if (connectivityResult == ConnectivityResult.mobile||connectivityResult == ConnectivityResult.wifi) {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-    email: _email, password: _password);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-      } catch (e) {
-        showSimpleDialog();
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        try {
+          UserCredential userCredential = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: _email, password: _password);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
+        } catch (e) {
+          showSimpleDialog();
+        }
       }
-    }
-   }
-   else{
-     
+    } else {
       return showDialog(
-      context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("GİRİŞ YAPILAMIYOR!"),
-        content: Text("Lütfen internet bağlantınızı kontrol ediniz."),
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("GİRİŞ YAPILAMIYOR!"),
+              content: Text("Lütfen internet bağlantınızı kontrol ediniz."),
+            );
+          });
+    }
+  }
 
-      );
-    }
-    );
-  }
-  }
-  Future<void> showSimpleDialog() async{
+  Future<void> showSimpleDialog() async {
     return showDialog(
-      context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("OTURUM AÇILAMIYOR!"),
-        content: Text("Lütfen geçerli bir e-mail ya da şifre giriniz.Şifrenizi unuttuysanız lütfen bizimle iletişime geçiniz."),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Tamam"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            )
-        ],
-      );
-    }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("OTURUM AÇILAMIYOR!"),
+            content: Text(
+                "Lütfen geçerli bir e-mail ya da şifre giriniz.Şifrenizi unuttuysanız lütfen bizimle iletişime geçiniz."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Tamam"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 }
-
-

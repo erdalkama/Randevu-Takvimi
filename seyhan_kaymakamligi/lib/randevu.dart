@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
-
+// ignore_for_file: prefer_const_constructors, must_be_immutable, deprecated_member_use
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Bekleyenler extends StatelessWidget {
-Bekleyenler({Key? key}) : super(key: key);
+  Bekleyenler({Key? key}) : super(key: key);
   final _firestore = FirebaseFirestore.instance;
   TextEditingController adsoyadController = TextEditingController();
   TextEditingController konuController = TextEditingController();
@@ -16,20 +15,21 @@ Bekleyenler({Key? key}) : super(key: key);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 0, 0, 0),
-          title: Text(
-            'RANDEVU BEKLEYENLER LİSTESİ',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-            ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text(
+          'RANDEVU BEKLEYENLER LİSTESİ',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
           ),
-          centerTitle: true,
-          ),
-        body: Container(
-          decoration: BoxDecoration(
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/seyhan_logo_3.png"),
-            colorFilter: const ColorFilter.mode(Color.fromARGB(29, 114, 114, 114), BlendMode.modulate),
+            colorFilter: const ColorFilter.mode(
+                Color.fromARGB(29, 114, 114, 114), BlendMode.modulate),
             fit: BoxFit.scaleDown,
           ),
         ),
@@ -50,37 +50,37 @@ Bekleyenler({Key? key}) : super(key: key);
                         itemCount: listOfDocumentSnap.length,
                         itemBuilder: (context, index) {
                           return Row(
-                            children: 
-                              [
-                                Expanded(
-                                child:ListTile(
-                                title: Text(
-                                    '${listOfDocumentSnap[index]['adsoyad']}',
-                                    style: TextStyle(fontSize: 20)),
-                                subtitle: Text(
-                                    '${listOfDocumentSnap[index]['konu']}',
-                                    style: TextStyle(fontSize: 16)),
-                                leading: Text(
-                                  '${listOfDocumentSnap[index]['telefon']}',
-                                  style: TextStyle(fontSize: 16)), 
-                                trailing: IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () async {
-                                    await listOfDocumentSnap[index]
-                                        .reference
-                                        .delete();
-                                  },
+                            children: [
+                              Expanded(
+                                child: ListTile(
+                                  title: Text(
+                                      '${listOfDocumentSnap[index]['adsoyad']}',
+                                      style: TextStyle(fontSize: 20)),
+                                  subtitle: Text(
+                                      '${listOfDocumentSnap[index]['konu']}',
+                                      style: TextStyle(fontSize: 16)),
+                                  leading: Text(
+                                      '${listOfDocumentSnap[index]['telefon']}',
+                                      style: TextStyle(fontSize: 16)),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete_forever),
+                                    onPressed: () async {
+                                      await listOfDocumentSnap[index]
+                                          .reference
+                                          .delete();
+                                    },
+                                  ),
                                 ),
-                               /* onLongPress: () async {
-                                     Map<String, dynamic> data1Data = {
-                                     'telefon':telefonController.text,
-                                     'adsoyad': adsoyadController.text,
-                                     'konu': konuController.text,
-                                    };
-                                  await bekleyenlerRef.doc().update(data1Data);
-                                },*/
                               ),
-                                ),
+                              ButtonBar(
+                                children: [
+                                  FlatButton(
+                                      onPressed: () async {},
+                                      child: Text("Güncelle",
+                                          style:
+                                              TextStyle(color: Colors.black)))
+                                ],
+                              )
                             ],
                           );
                         },
@@ -95,36 +95,34 @@ Bekleyenler({Key? key}) : super(key: key);
               },
             ),
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(5.0, 20.0, 75.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(5.0, 20.0, 75.0, 20.0),
               child: Form(
                 child: Column(
                   children: [
                     TextFormField(
                       controller: adsoyadController,
-                      decoration:
-                          InputDecoration(hintText: 
-                          'Ad Soyad Ünvan Giriniz',
-                          border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0)),
-                          ),
+                      decoration: InputDecoration(
+                        hintText: 'Ad Soyad Ünvan Giriniz',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                      ),
                     ),
                     TextFormField(
                       controller: konuController,
-                      decoration: InputDecoration(hintText: 
-                          'Randevu Konusu Giriniz',
-                          border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0)),
+                      decoration: InputDecoration(
+                        hintText: 'Randevu Konusu Giriniz',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
                       ),
                     ),
                     TextFormField(
                       controller: telefonController,
-                      decoration: InputDecoration(hintText: 
-                          'Telefon Numarası Giriniz',
-                          border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0)),
+                      decoration: InputDecoration(
+                        hintText: 'Telefon Numarası Giriniz',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
                       ),
-                      ),
+                    ),
                   ],
                 ),
               ),
@@ -136,13 +134,13 @@ Bekleyenler({Key? key}) : super(key: key);
         child: Text('Ekle'),
         onPressed: () async {
           Map<String, dynamic> data1Data = {
-            'telefon':telefonController.text,
+            'telefon': telefonController.text,
             'adsoyad': adsoyadController.text,
             'konu': konuController.text,
           };
           await bekleyenlerRef.doc().set(data1Data);
         },
       ),
-      );
+    );
   }
 }

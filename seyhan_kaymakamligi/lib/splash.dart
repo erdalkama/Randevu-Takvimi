@@ -6,8 +6,6 @@ import 'package:seyhan_kaymakamligi/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
 class AnimatedSplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() => new SplashScreenState();
@@ -27,10 +25,10 @@ class SplashScreenState extends State<AnimatedSplashScreen>
 
   void navigationPage() {
     Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ));
   }
 
   @override
@@ -61,14 +59,15 @@ class SplashScreenState extends State<AnimatedSplashScreen>
             mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-
-              Padding(padding: EdgeInsets.only(bottom: 30.0),child:new Text(
-                'SEYHAN KAYMAKAMLIĞI RANDEVU TAKVİMİ',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
-              ))
-
-
-          ],),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: new Text(
+                    'SEYHAN KAYMAKAMLIĞI RANDEVU TAKVİMİ',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w700),
+                  ))
+            ],
+          ),
           new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -79,7 +78,10 @@ class SplashScreenState extends State<AnimatedSplashScreen>
               ),
               new Text(
                 'HOŞ GELDİNİZ',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 30),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 30),
               ),
             ],
           ),

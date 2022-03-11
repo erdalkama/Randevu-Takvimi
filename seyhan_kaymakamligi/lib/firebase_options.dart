@@ -60,8 +60,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '789432070164',
     projectId: 'seyhan-kaymakamligi-62f0b',
     storageBucket: 'seyhan-kaymakamligi-62f0b.appspot.com',
-    androidClientId: '789432070164-5lpgn1cd3a34vpc2rnk4b2tenenksiok.apps.googleusercontent.com',
-    iosClientId: '789432070164-3dv8gtc10djk6vq7qokb1bvvlg7kp4gh.apps.googleusercontent.com',
+    androidClientId:
+        '789432070164-5lpgn1cd3a34vpc2rnk4b2tenenksiok.apps.googleusercontent.com',
+    iosClientId:
+        '789432070164-3dv8gtc10djk6vq7qokb1bvvlg7kp4gh.apps.googleusercontent.com',
     iosBundleId: 'n',
   );
 }

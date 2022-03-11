@@ -8,8 +8,6 @@ import 'firebase_options.dart';
 import 'home_page.dart';
 import 'login.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -17,13 +15,15 @@ void main() async {
   );
   runApp(AnaGiris());
 }
+
 class AnaGiris extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 255, 255, 255), 
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
+        primaryColor: Color.fromARGB(255, 255, 255, 255),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
       ),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
@@ -31,9 +31,8 @@ class AnaGiris extends StatelessWidget {
   }
 }
 
-
 var rotalar = <String, WidgetBuilder>{
-  "/animated":(BuildContext context) => AnimatedSplashScreen(),
+  "/animated": (BuildContext context) => AnimatedSplashScreen(),
   "/login": (BuildContext context) => LoginPage(),
   "/homepage": (BuildContext context) => HomePage(),
 };
