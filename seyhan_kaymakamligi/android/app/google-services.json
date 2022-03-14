@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "789432070164-30kacorf6hnk941uailpr9rrbo85s691.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.seyhan_kaymakamligi",
+            "certificate_hash": "e77bfef26f9f2bffeae351933d532ce01af19aac"
+          }
+        },
+        {
           "client_id": "789432070164-t7nclshiif23l5sls7blmbgnipg9o729.apps.googleusercontent.com",
           "client_type": 3
         }

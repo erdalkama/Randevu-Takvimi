@@ -8,7 +8,7 @@ class Bekleyenler extends StatelessWidget {
   TextEditingController adsoyadController = TextEditingController();
   TextEditingController konuController = TextEditingController();
   TextEditingController telefonController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
     CollectionReference bekleyenlerRef = _firestore.collection('data1');
@@ -36,7 +36,7 @@ class Bekleyenler extends StatelessWidget {
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: bekleyenlerRef.snapshots(),
+              stream: bekleyenlerRef.orderBy('kayit_tarihi',descending: false).snapshots(),
               builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                 if (asyncSnapshot.hasError) {
                   return Center(
@@ -72,7 +72,7 @@ class Bekleyenler extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              ButtonBar(
+                              /*ButtonBar(
                                 children: [
                                   FlatButton(
                                       onPressed: () async {},
@@ -80,7 +80,7 @@ class Bekleyenler extends StatelessWidget {
                                           style:
                                               TextStyle(color: Colors.black)))
                                 ],
-                              )
+                              )*/
                             ],
                           );
                         },
@@ -137,6 +137,7 @@ class Bekleyenler extends StatelessWidget {
             'telefon': telefonController.text,
             'adsoyad': adsoyadController.text,
             'konu': konuController.text,
+            'kayit_tarihi':DateTime.now(),
           };
           await bekleyenlerRef.doc().set(data1Data);
         },
