@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  "",
+                  "SEYHAN KAYMAKAMLIĞI RANDEVU TAKVİMİNE HOŞGELDİNİZ",
                   textAlign: TextAlign.center,
                   style: new TextStyle(
                       fontSize: 25.0,
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.w700),
                 ),
               ),
-              SizedBox(height: 48.0),
+              SizedBox(height: 150.0),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 validator: (input) {
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onSaved: (input) => _email = input!,
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 validator: (input) {
                   if (input!.length < 6) {

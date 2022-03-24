@@ -95,7 +95,7 @@ class Bekleyenler extends StatelessWidget {
               },
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 20.0, 75.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 20.0, 75.0, 10.0),
               child: Form(
                 child: Column(
                   children: [
@@ -131,7 +131,7 @@ class Bekleyenler extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text('Ekle'),
+        child: const Icon(Icons.add_circle_outline_rounded),
         onPressed: () async {
           Map<String, dynamic> data1Data = {
             'telefon': telefonController.text,

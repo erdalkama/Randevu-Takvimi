@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_import, use_key_in_widget_constructors, unnecessary_new, prefer_const_constructors, unnecessary_this
 
 import 'dart:async';
-import 'package:seyhan_kaymakamligi/home_page.dart';
 import 'package:seyhan_kaymakamligi/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
