@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:seyhan_kaymakamligi/randevu.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import 'ekleme.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,15 +19,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
-  final List<String> options = <String>['Delete'];
+  final List<String> options = <String>['SİL'];
   final databaseReference = FirebaseFirestore.instance;
   final _firestore = FirebaseFirestore.instance;
   TextEditingController randevuController = TextEditingController();
   TextEditingController baslangicController = TextEditingController();
   TextEditingController bitisController = TextEditingController();
-  //selected event
+  Meeting? _selectedAppointment;
+
   @override
   void initState() {
+    _selectedAppointment = null;
     _initializeEventColor();
     getDataFromFireStore().then((results) {
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     final Random random = Random();
     List<Meeting> list = snapShotsValue.docs
         .map((e) => Meeting(
+            id: e.id,
             eventName: e.data()['Subject'],
             from: DateFormat('dd/MM/yyyy HH:mm').parse(e.data()['StartTime']),
             to: DateFormat('dd/MM/yyyy HH:mm').parse(e.data()['EndTime']),
@@ -62,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
           leading: PopupMenuButton<String>(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.delete_forever),
             itemBuilder: (BuildContext context) => options.map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
@@ -70,9 +72,33 @@ class _HomePageState extends State<HomePage> {
               );
             }).toList(),
             onSelected: (String value) {
-              if (value == "Delete") {
+              if (value == "SİL") {
                 try {
-                  databaseReference.doc().delete();
+                  if (_selectedAppointment != null) {
+                    events!.appointments?.removeAt(
+                        events!.appointments!.indexOf(_selectedAppointment));
+                    events!.notifyListeners(CalendarDataSourceAction.remove,
+                        <Meeting>[_selectedAppointment!]);
+
+                    databaseReference.doc(_selectedAppointment?.id).delete();
+                  } else if (_selectedAppointment == null) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text("SİLİNEMİYOR"),
+                              content: Text(
+                                  "Lüften takvim üzerinde bulunan randevuyu seçtikten sonra sil butonuna tıklayınız."),
+                              actions: [
+                                // ignore: deprecated_member_use
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Tamam"))
+                              ]);
+                        });
+                  }
                 } catch (e) {}
               }
             },
@@ -107,6 +133,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: SfCalendar(
+            onTap: calendarTapped,
             headerHeight: 30,
             todayHighlightColor: Colors.black,
             allowAppointmentResize: true,
@@ -127,6 +154,7 @@ class _HomePageState extends State<HomePage> {
                 showAgenda: true,
                 dayFormat: 'EEE'),
             scheduleViewSettings: ScheduleViewSettings(
+
                 //appointmentItemHeight: 60,weekHeaderSettings: WeekHeaderSetti
                 ),
             showCurrentTimeIndicator: true,
@@ -138,14 +166,6 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Ekleme()));
         },
-        /*onPressed: () async {
-          Map<String, dynamic> eventData = {
-            'Subject': randevuController.text,
-            'StartTime': baslangicController.text,
-            'EndTime': bitisController.text,
-          };
-          await databaseReference.doc(randevuController.text).set(eventData);
-        },*/
       ),
     );
   }
@@ -171,6 +191,14 @@ class _HomePageState extends State<HomePage> {
     _colorCollection.add(Color.fromARGB(255, 160, 83, 76));
     _colorCollection.add(Color.fromARGB(255, 48, 47, 47));
     _colorCollection.add(Color.fromARGB(255, 194, 24, 129));
+  }
+
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    if (calendarTapDetails.targetElement == CalendarElement.agenda ||
+        calendarTapDetails.targetElement == CalendarElement.appointment) {
+      final Meeting appointment = calendarTapDetails.appointments![0];
+      _selectedAppointment = appointment;
+    }
   }
 }
 
@@ -200,13 +228,13 @@ class MeetingDataSource extends CalendarDataSource {
   }
 
   @override
-  Color getColor(int index) {
-    return appointments![index].background;
+  String getId(int index) {
+    return appointments![index].id;
   }
 
   @override
-  Color getIcon(int index) {
-    return appointments![index].iconbutton;
+  Color getColor(int index) {
+    return appointments![index].background;
   }
 }
 
@@ -216,7 +244,7 @@ class Meeting {
   DateTime? to;
   Color? background;
   bool? isAllDay;
-  IconButton? iconbutton;
+  String? id;
 
   Meeting(
       {this.eventName,
@@ -224,152 +252,5 @@ class Meeting {
       this.to,
       this.background,
       this.isAllDay,
-      this.iconbutton});
+      this.id});
 }
-
-  /*Widget build(BuildContext context) {
-    CollectionReference homeRef = _firestore.collection('data11');
-    return Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Color.fromARGB(255, 0, 0, 0),
-            title: Text(
-              'STAJ PROJESİ',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            centerTitle: true,
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Bekleyenler()));
-                },
-                icon: Icon(
-                  Icons.date_range_rounded,
-                ),
-              )
-            ]),
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/seyhan_logo_3.png"),
-              colorFilter: const ColorFilter.mode(
-                  Color.fromARGB(29, 114, 114, 114), BlendMode.modulate),
-              fit: BoxFit.scaleDown,
-            ),
-          ),
-          child:
-            StreamBuilder<QuerySnapshot>(
-                stream: homeRef.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                  if (asyncSnapshot.hasError) {
-                    return Center(
-                        child: Text('Bir Hata Oluştu, Tekrar Deneyiniz'));
-                  } else {
-                    if (asyncSnapshot.hasData) {
-                      List<DocumentSnapshot> listOfDocumentSnap =
-                          asyncSnapshot.data.docs;
-                      return Stack(
-                        children: [
-                          SfCalendar(
-                            view: CalendarView.month,
-                            allowViewNavigation: true,
-                            dataSource: MeetingDataSource(_getDataSource()),
-                            firstDayOfWeek: 1,
-                            allowedViews: const <CalendarView>[
-                              CalendarView.month,
-                              CalendarView.week,
-                              CalendarView.schedule,
-                            ],
-                            appointmentTimeTextFormat: 'HH:mm',
-                            monthViewSettings: MonthViewSettings(
-                                appointmentDisplayMode:
-                                    MonthAppointmentDisplayMode.appointment,
-                                navigationDirection:
-                                    MonthNavigationDirection.horizontal,
-                                showAgenda: true,
-                                dayFormat: 'EEE'),
-                            scheduleViewSettings: ScheduleViewSettings(
-                                //appointmentItemHeight: 60,weekHeaderSettings: WeekHeaderSettings(height: 40,textAlign: TextAlign.center)
-                                ),
-                            showCurrentTimeIndicator: true,
-                            showWeekNumber: true,
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }
-                }),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.more_time_sharp),
-          onPressed: () async {
-            DatePicker.showDateTimePicker(context,
-                showTitleActions: true,
-                minTime: DateTime(2022, 3, 5),
-                maxTime: DateTime(2032, 6, 7), onChanged: (date) {
-              print('change $date');
-            }, onConfirm: (date) async {
-              
-              Map<String, dynamic> data11Data = {
-                'date': date,
-              };
-              await homeRef.doc().set(data11Data);
-              print('confirm $date');
-            }, currentTime: DateTime.now(), locale: LocaleType.tr);
-            /*Map<String, dynamic> data11Data = {
-              'dakika': dakikaController.text,
-              'adsoyadkonu': adsoyadController.text,
-              'saat': saatController.text,
-              'ay': ayController.text,
-              'yıl': yilController.text,
-            };
-            await homeRef.doc().set(data11Data);*/
-          },
-        ));
-  }*/
-
-/*List<Meeting> _getDataSource() {
-  final List<Meeting> meetings = <Meeting>[];
-  final DateTime today = DateTime.now();
-  final DateTime startTime =
-      DateTime(today.year, today.month, today.day, 9, 3, 0);
-  meetings.add(Meeting('Konferans', startTime, const Color(0xFF0F8644)));
-  return meetings;
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
-  }
-}
-
-class Meeting {
-  Meeting(this.eventName, this.from, this.background);
-
-  String eventName;
-  DateTime from;
-  Color background;
-}*/

@@ -103,7 +103,7 @@ class _EklemeState extends State<Ekleme> {
             'StartTime': baslangicController.text,
             'EndTime': bitisController.text,
           };
-          await databaseReference.doc(randevuController.text).set(eventData);
+          await databaseReference.doc().set(eventData);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomePage()));
         },
