@@ -1,6 +1,6 @@
 {
-    "name": "seyhan_kaymakamligi",
-    "short_name": "seyhan_kaymakamligi",
+    "name": "Seyhan Kaymakamlığı Randevu Takvimi",
+    "short_name": "Randevu Takvimi",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

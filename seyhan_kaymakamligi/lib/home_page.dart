@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:seyhan_kaymakamligi/kullanici_adi.dart';
 import 'package:seyhan_kaymakamligi/randevu.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'ekleme.dart';
@@ -19,14 +20,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
-  final List<String> options = <String>['SİL'];
+  final List<String> options = <String>[
+    'SİL', /*'GÜNCELLE'*/
+  ];
   final databaseReference = FirebaseFirestore.instance;
+  final logReference = FirebaseFirestore.instance;
   final _firestore = FirebaseFirestore.instance;
   TextEditingController randevuController = TextEditingController();
   TextEditingController baslangicController = TextEditingController();
   TextEditingController bitisController = TextEditingController();
   Meeting? _selectedAppointment;
-
   @override
   void initState() {
     _selectedAppointment = null;
@@ -47,8 +50,8 @@ class _HomePageState extends State<HomePage> {
         .map((e) => Meeting(
             id: e.id,
             eventName: e.data()['Subject'],
-            from: DateFormat('dd/MM/yyyy HH:mm').parse(e.data()['StartTime']),
-            to: DateFormat('dd/MM/yyyy HH:mm').parse(e.data()['EndTime']),
+            from: DateFormat('yyyy-MM-dd HH:mm').parse(e.data()['StartTime']),
+            to: DateFormat('yyyy-MM-dd HH:mm').parse(e.data()['EndTime']),
             background: _colorCollection[random.nextInt(18)],
             isAllDay: false))
         .toList();
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     CollectionReference databaseReference = _firestore.collection('Event');
+    CollectionReference logReference = _firestore.collection('SilenKisi');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -81,6 +85,14 @@ class _HomePageState extends State<HomePage> {
                         <Meeting>[_selectedAppointment!]);
 
                     databaseReference.doc(_selectedAppointment?.id).delete();
+                    Map<String, dynamic> deleteData = {
+                      'silenKisi': Kullanicikaydi.email,
+                      'silmeZamanı': DateTime.now(),
+                      'KonuAdi': _selectedAppointment!.eventName,
+                      'EtkinlikBaşlangıçTarihi': _selectedAppointment!.from,
+                      'EtkinlikBitişTarihi': _selectedAppointment!.to,
+                    };
+                    logReference.doc().set(deleteData);
                   } else if (_selectedAppointment == null) {
                     showDialog(
                         context: context,
@@ -136,11 +148,11 @@ class _HomePageState extends State<HomePage> {
             onTap: calendarTapped,
             headerHeight: 30,
             todayHighlightColor: Colors.black,
-            allowAppointmentResize: true,
             view: CalendarView.month,
             allowViewNavigation: true,
             dataSource: events,
             firstDayOfWeek: 1,
+            showDatePickerButton: true,
             allowedViews: const <CalendarView>[
               CalendarView.month,
               CalendarView.week,
@@ -194,8 +206,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
-    if (calendarTapDetails.targetElement == CalendarElement.agenda ||
-        calendarTapDetails.targetElement == CalendarElement.appointment) {
+    if ((calendarTapDetails.appointments!.isNotEmpty) &&
+        (calendarTapDetails.targetElement == CalendarElement.agenda ||
+            calendarTapDetails.targetElement == CalendarElement.appointment)) {
       final Meeting appointment = calendarTapDetails.appointments![0];
       _selectedAppointment = appointment;
     }
@@ -206,38 +219,31 @@ class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Meeting> source) {
     appointments = source;
   }
-
   @override
   DateTime getStartTime(int index) {
     return appointments![index].from;
   }
-
   @override
   DateTime getEndTime(int index) {
     return appointments![index].to;
   }
-
   @override
   bool isAllDay(int index) {
     return appointments![index].isAllDay;
   }
-
   @override
   String getSubject(int index) {
     return appointments![index].eventName;
   }
-
   @override
   String getId(int index) {
     return appointments![index].id;
   }
-
   @override
   Color getColor(int index) {
     return appointments![index].background;
   }
 }
-
 class Meeting {
   String? eventName;
   DateTime? from;
@@ -245,7 +251,6 @@ class Meeting {
   Color? background;
   bool? isAllDay;
   String? id;
-
   Meeting(
       {this.eventName,
       this.from,

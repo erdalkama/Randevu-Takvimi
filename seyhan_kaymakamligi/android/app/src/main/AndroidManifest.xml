@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.seyhan_kaymakamligi">
    <application
-        android:label="seyhan_kaymakamligi"
+        android:label="Seyhan Kaymakamlığı Randevu Takvimi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

@@ -2,6 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:seyhan_kaymakamligi/ekleme.dart';
 import 'package:seyhan_kaymakamligi/randevu.dart';
 import 'package:seyhan_kaymakamligi/splash.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class AnaGiris extends StatelessWidget {
         const Locale('en'),
       ],
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 255, 255, 255),
+        primaryColor: Color.fromARGB(255, 0, 0, 0),
         colorScheme: ColorScheme.fromSwatch()
             .copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
       ),

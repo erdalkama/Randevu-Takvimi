@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, deprecated_member_use
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:seyhan_kaymakamligi/kullanici_adi.dart';
 
 class Bekleyenler extends StatelessWidget {
   Bekleyenler({Key? key}) : super(key: key);
@@ -8,10 +9,12 @@ class Bekleyenler extends StatelessWidget {
   TextEditingController adsoyadController = TextEditingController();
   TextEditingController konuController = TextEditingController();
   TextEditingController telefonController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     CollectionReference bekleyenlerRef = _firestore.collection('data1');
+    CollectionReference randevuReference =
+        _firestore.collection('RandevuSilenKisi');
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -36,7 +39,9 @@ class Bekleyenler extends StatelessWidget {
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: bekleyenlerRef.orderBy('kayit_tarihi',descending: false).snapshots(),
+              stream: bekleyenlerRef
+                  .orderBy('kayit_tarihi', descending: false)
+                  .snapshots(),
               builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                 if (asyncSnapshot.hasError) {
                   return Center(
@@ -65,9 +70,19 @@ class Bekleyenler extends StatelessWidget {
                                   trailing: IconButton(
                                     icon: Icon(Icons.delete_forever),
                                     onPressed: () async {
+                                      Map<String, dynamic> deleteData = {
+                                        'silenKisi': Kullanicikaydi.email,
+                                        'silinenAd': listOfDocumentSnap[index]
+                                            ['adsoyad'],
+                                        'silinenKonu': listOfDocumentSnap[index]
+                                            ['konu'],
+                                        'silmeZamanı': DateTime.now(),
+                                      };
+
                                       await listOfDocumentSnap[index]
                                           .reference
                                           .delete();
+                                      randevuReference.doc().set(deleteData);
                                     },
                                   ),
                                 ),
@@ -137,9 +152,13 @@ class Bekleyenler extends StatelessWidget {
             'telefon': telefonController.text,
             'adsoyad': adsoyadController.text,
             'konu': konuController.text,
-            'kayit_tarihi':DateTime.now(),
+            'kayit_tarihi': DateTime.now(),
+            'OluşturanKişi': Kullanicikaydi.email,
           };
           await bekleyenlerRef.doc().set(data1Data);
+          telefonController.clear();
+          adsoyadController.clear();
+          konuController.clear();
         },
       ),
     );

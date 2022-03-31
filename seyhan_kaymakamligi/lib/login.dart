@@ -4,7 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seyhan_kaymakamligi/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:seyhan_kaymakamligi/kullanici_adi.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -15,12 +15,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _email, _password;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late String userEmail;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Color.fromARGB(255, 255, 255, 255),
-    ));
+    /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Color.fromARGB(255, 255, 255, 255),*
+    ));*/
     return new Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Form(
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onPressed: signIn,
                   padding: EdgeInsets.all(12),
-                  color: Color.fromARGB(129, 0, 0, 0),
+                  color: Color.fromARGB(255, 0, 0, 0),
                   child: Text('Giriş',
                       style: TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255),
@@ -110,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
         try {
           UserCredential userCredential = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
+          getCurrentUserInfo();
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => HomePage()));
         } catch (e) {
@@ -146,5 +149,13 @@ class _LoginPageState extends State<LoginPage> {
             ],
           );
         });
+  }
+
+  void getCurrentUserInfo() async {
+    dynamic user;
+    user = FirebaseAuth.instance.currentUser;
+    userEmail = user.email;
+    print(userEmail);
+    Kullanicikaydi.email = userEmail;
   }
 }

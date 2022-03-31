@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:seyhan_kaymakamligi/home_page.dart';
+import 'package:seyhan_kaymakamligi/kullanici_adi.dart';
 
 class Ekleme extends StatefulWidget {
   const Ekleme({Key? key}) : super(key: key);
@@ -15,6 +19,9 @@ class _EklemeState extends State<Ekleme> {
   TextEditingController bitisController = TextEditingController();
   final _firestore = FirebaseFirestore.instance;
   final databaseReference = FirebaseFirestore.instance;
+  late String dateBaslangic;
+  late String dateBitis;
+
   @override
   Widget build(BuildContext context) {
     CollectionReference databaseReference = _firestore.collection('Event');
@@ -59,36 +66,43 @@ class _EklemeState extends State<Ekleme> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  validator: (input) {
-                    if (input!.isEmpty) {
-                      return "00/00/0000 00:00 Formatonda Giriniz";
-                    }
+                DateTimePicker(
+                  cursorColor: Colors.black,
+                  type: DateTimePickerType.dateTimeSeparate,
+                  dateMask: 'dd/MM/yyyy',
+                  initialValue: '',
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                  dateLabelText: 'Gün',
+                  timeLabelText: 'Saat',
+                  onChanged: (val) {
+                    print(val);
+                    dateBaslangic = val;
+                  },
+                  validator: (val) {
+                    print(val);
                     return null;
                   },
-                  controller: baslangicController,
-                  decoration: InputDecoration(
-                    hintText:
-                        'Randevu Başlangıç Saati Giriniz "Gün/Ay/Yıl Saat:Dakika"',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                  ),
+                  onSaved: (val) => print(val),
                 ),
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  validator: (input) {
-                    if (input!.isEmpty) {
-                      return "00/00/0000 00:00 Formatonda Giriniz";
-                    }
+                DateTimePicker(
+                  type: DateTimePickerType.dateTimeSeparate,
+                  dateMask: 'dd/MM/yyyy',
+                  initialValue: '',
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                  dateLabelText: 'Gün',
+                  timeLabelText: 'Saat',
+                  onChanged: (val) {
+                    print(val);
+                    dateBitis = val;
+                  },
+                  validator: (val) {
+                    print(val);
                     return null;
                   },
-                  controller: bitisController,
-                  decoration: InputDecoration(
-                    hintText:
-                        'Randevu Bitiş Saati Giriniz "Gün/Ay/Yıl Saat:Dakika"',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                  ),
+                  onSaved: (val) => print(val),
                 ),
               ],
             ),
@@ -100,8 +114,10 @@ class _EklemeState extends State<Ekleme> {
         onPressed: () async {
           Map<String, dynamic> eventData = {
             'Subject': randevuController.text,
-            'StartTime': baslangicController.text,
-            'EndTime': bitisController.text,
+            'StartTime': dateBaslangic,
+            'EndTime': dateBitis,
+            'kayit_tarihi': DateTime.now(),
+            'EtkinlikOluşturanKişi': Kullanicikaydi.email,
           };
           await databaseReference.doc().set(eventData);
           Navigator.push(context,
