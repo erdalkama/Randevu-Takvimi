@@ -39,7 +39,7 @@ class AnaGiris extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch()
             .copyWith(secondary: Color.fromARGB(255, 0, 0, 0)),
       ),
-      home: HomePage(),
+      home: AnimatedSplashScreen(),
       locale: const Locale('tr'),
       debugShowCheckedModeBanner: false,
     );
